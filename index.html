@@ -7,12 +7,23 @@
     <title>Option keys Listing</title>
 </head>
 <body>
-    <div id="file-input-page">
+    <div id="select-page">
         <h1>Option keys Listing</h1>
+        <div>
+            Choose the Product: 
+            <select name="product" id="product">
+                <option value="none">-</option>
+                <option value="mecury">Mercury</option>
+                <option value="venus">Venus</option>
+                <option value="mars">Mars</option>
+            </select>
+        </div>
         <div>
             Select a text file: 
             <input type="file" id="fileInput" accept=".txt">
         </div>
+    </div>
+    <div id="display">
         <div id="tableContainer">
             <tr>
                 <th>
