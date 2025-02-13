@@ -1,0 +1,12 @@
+body{
+    background-color: aliceblue;
+}
+
+tableContainer {
+    border-style: 1px solid black
+}
+
+th{
+    background-color: black;
+    color: white;
+}
