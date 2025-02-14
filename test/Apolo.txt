@@ -3,16 +3,16 @@ Product Software Option Keys:
 100kVA                             Permanent                                         
 1024 Image Matrix                  Permanent                                         
 3D Dose Modulation                 Permanent                                                                                
-AntiMalware			   Permanent                                                                                 
+AntiMalware			               Permanent                                                                                 
 AxialShuttle                       Permanent                                         
 Cardiac SnapShot                   Permanent                                                                                                                                                                  
 Helical-120-Sec                    Permanent                                         
 High Pitch Helical                 Permanent                                                                                 
-0.4Speed	                   Permanent                                         
+0.4Speed	                       Permanent                                         
 Lung Cancer Screening              Permanent                                         
-FOV	                           Permanent                                         
+FOV	                               Permanent                                         
 Organ Dose Modulation              Permanent                                         
 Overlap Recon                      Permanent                                         
-64-slice                   	   Permanent                                                                                                                  
+64-slice                   	       Permanent                                                                                                                  
 Tube7_0MHU                         Permanent                                         
 ---End Of List---

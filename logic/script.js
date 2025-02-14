@@ -3,12 +3,14 @@
 document.getElementById(`fileInput`).addEventListener('change', function(event) {
     const file = event.target.files[0];
     const reader = new FileReader(); // read file
-    const table_default = document.getElementById('keys'); // save default table status
+    const table = document.getElementById('keys'); // save default table status
+    const inputCol = table.querySelectorAll("[id^='col2']"); // select 2nd column
+    cleaning(inputCol); // table initiallization
     
-    /* --- extract reference table options ⇒ refer_options --- */
-    const refer_cell = table_default.querySelectorAll("[id^='col1']"); // select row
-    let refer_options = []; // array for reference options
-    refer_options = extract(refer_cell, refer_options) //extract
+    /* --- extract reference table options ⇒ referOptions --- */
+    const referCol = table.querySelectorAll("[id^='col1']"); // select row
+    let referOptions = []; // array for reference options
+    referOptions = takeOut(referCol, referOptions) //extract
     /* ------------------------------ */
     
     // function after file loaded
@@ -21,9 +23,8 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
         /* ------------------------------ */
         
         /* --- compare reference options to current options  --- */
-        const table = document.getElementById('keys');
-        const input_cell = table.querySelectorAll("[id^='col2']");
-        arrange(refer_options, options, input_cell);
+        const inputCol = table.querySelectorAll("[id^='col2']");
+        arrange(referOptions, options, inputCol);
         /* ------------------------------ */
     };
 
@@ -38,62 +39,78 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
  * @param {array} storage array
  * @return {array} options keys 
 */
-function excavate(text, array) {
+function excavate(mine, minecart) {
     /* Remove Title */
-    const inter1 = text.split('-----------------------------');
+    const pickax1 = mine.split('-----------------------------');
     /* Remove CRLF */
-    const inter2 = inter1[1].replace(/\n/g,'!');
+    const pickax2 = pickax1[1].replace(/\r\n/g,'!');
     /* Remove Consecutive(2 or more) space */
-    const inter3 = inter2.replace(/\s{2,}/g,'#');
+    const pickax3 = pickax2.replace(/\s{2,}/g,'#');
     /* Split word */
-    const refining = inter3.split('#');
+    const ore = pickax3.split('#');
     /* store options excavated */
-    let extractingOptions = true;
+    let valuable = true;
 
-    refining.forEach((element) =>  {
-        if (element.includes('End Of List')){
-            extractingOptions = false;
-        } else if (extractingOptions && element.includes('!')) {
-            array.push(element.replace('!',''));
+    ore.forEach((mineral) =>  {
+        if (mineral.includes('End Of List')){
+            valuable = false;
+        } else if (valuable && mineral.includes('!')) {
+            minecart.push(mineral.replace('!',''));
         } else {
-            extractingOptions = true;
+            valuable = true;
         }
     });
     /* Return */
-    return array;
+    return minecart;
 };
 
 /** 
- * extract option keys from table
+ * take out option keys from table
  * @method 
  * @param {object} table contents
  * @param {array} storage array
  * @return {array} extracted data
 */
-function extract(cell, array){
+function takeOut(showcase, articles){
     /* store options extracted */
-    for (var i = 0; i < cell.length; i++){
-        array.push(cell[i].firstChild.data);
+    for (var i = 0; i < showcase.length; i++){
+        articles.push(showcase[i].firstChild.data);
     }
     /* Return */
-    return array
+    return articles
 }
 
 /**
- * extract option keys from table
+ * arrange data to table
  * @method
  * @param {array} reference options
  * @param {array} current options
- * @param {array} cell
+ * @param {array} second columns data
 */
-function arrange(refer, current ,cell) {
+function arrange(articles, ore ,col) {
     /* input data to cell */
-    for(var i = 0; i < current.length; i++) {
-        console.log(current[i]);
-        for (var j = 0; j < refer.length; j++) {
-            if(current[i] == refer[j]){
-                cell[j].innerHTML = current[i];
-            } 
+    for(var i = 0; i < ore.length; i++) {
+        var j = 0;
+        while (j < articles.length) {
+            console.log(ore[i], articles[j]);
+            if(articles[j].toLowerCase().includes(ore[i].toLowerCase())){
+                col[j].innerHTML = ore[i];
+                break;
+            }
+            j++; 
         };
     };
 }
+
+/**
+ * cleaning reference option table
+ * @method
+ * @param {object} table contents
+*/
+function cleaning(stand) {
+    /* input data to cell */
+    for(var i = 0; i < stand.length; i++) {
+        stand[i].innerHTML = "";
+    };
+}
+

@@ -1,15 +1,15 @@
 Product Software Option Keys:
 -----------------------------
-100kVA                             Permanent                                         
+70kva-50wh                         Permanent                                         
 1024 Image Matrix                  Permanent                                         
 3D Dose Modulation                 Permanent                                                                                
 AntiMalware			               Permanent                                                                                 
 AxialShuttle                       Permanent                                         
 Cardiac SnapShot                   Permanent                                                                                 
-AIIR                               Permanent                                                                                 
+AI-IR                               Permanent                                                                                 
 Helical-120-Sec                    Permanent                                         
 High Pitch Helical                 Permanent                                                                                 
-Liquid-0.35-Routine                Permanent                                         
+rapid-0.35                         Permanent                                         
 Lung Cancer Screening              Permanent                                         
 FOV	                               Permanent                                         
 Organ Dose Modulation              Permanent                                         
