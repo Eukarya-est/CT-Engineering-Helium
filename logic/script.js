@@ -73,7 +73,6 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
  * @return {array} current option keys 
 */
 function excavate(mine, minecart) {
-    console.log(typeof(mine));
     /* remove Title */
     let pickax1;
     let pickax2;
@@ -99,7 +98,11 @@ function excavate(mine, minecart) {
 
     ore.forEach((mineral) =>  {
         
-        if (mineral.includes('End Of List') || mineral.includes('Product Software Option Keys') || mineral == '!'){
+        if (mineral.includes('End Of List') 
+            || mineral.includes('Product Software Option Keys') 
+            || mineral == '!' 
+            || mineral == ''
+        ){
             valuable = false;
         } else if (valuable && mineral.includes('!')) {
             minecart.push(mineral.replace('!',''));
@@ -180,14 +183,16 @@ function evaluate(articles, ore ,dish) {
  * initialization
  * @method
  * @param {object} table contents
- * @param {object} div (error message area)
- * @param {object} div (warning message area)
+ * @param {object} error message area
+ * @param {object} (warning message area
 */
-function cleaning(table, div, div) {
+function cleaning(table, error, warn) {
     /* object initialization */
     wipe(table); // table initiallization
-    div.innerHTML = "";
-    div.style.visibility = "hidden";
+    error.innerHTML = "";
+    error.style.visibility = "hidden";
+    warn.innerHTML = "";
+    warn.style.visibility = "hidden";
     /* ---=================--- */
 }
 
@@ -234,8 +239,9 @@ function warningMsgHandling(e, div) {
             div.style.visibility = "visible";
             div.innerHTML += e.key;
             break;
-        case "NokeyExist":
-            div.innerHTML = " !Warning: option Keys does NOT exist. "
+        case "noKeysExist":
+            div.innerHTML = e.message;
+            div.style.visibility = "visible";
             break;
         default:
             div.innerHTML = " !Warning "
