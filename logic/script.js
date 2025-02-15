@@ -1,19 +1,34 @@
+document.getElementById(`product`).addEventListener('change', function(event) {
+
+    const product = event.target.value;
+
+});
+
 // function after event to input file
 document.getElementById(`fileInput`).addEventListener('change', function(event) {
-    
-    const file = event.target.files[0];
-    const reader = new FileReader(); // read file
-    
-    const table = document.getElementById('keys'); // save default table status
+
     let errorMsg = document.getElementById('error'); // error message area
     let warningMsg = document.getElementById('warning'); // warning message area
+    
+    const reader = new FileReader(); // load file reader
+    const file = event.target.files[0]; // load file
+    /* --- file validation --- */
+    try{
+        fileValidate(file)
+    } catch(e) {
+        ErrorMsgHandling(e, errorMsg);
+    }
+    /* ---=================--- */
+
+    const table = document.getElementById('keys'); // save default table status
     const inputCol = table.querySelectorAll("[id^='col2']"); // select 2nd column
-    cleaning(inputCol, errorMsg, warningMsg);
+    cleaning(inputCol, errorMsg, warningMsg); // initialization
 
     /* --- extract reference table options ⇒ referOptions --- */
     const referCol = table.querySelectorAll("[id^='col1']"); // select row
     let referOptions = []; // array for reference options
     referOptions = takeOut(referCol, referOptions); //extract
+    /* ---=================--- */
     
     // function after file loaded
     reader.onload = function(event) {
@@ -30,6 +45,7 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
                 ErrorMsgHandling(e, errorMsg);
             }
         };
+        /* ---=================--- */
         
         /* --- compare reference options to current options  --- */
         const inputCol = table.querySelectorAll("[id^='col2']");
@@ -42,13 +58,12 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
                 warningMsgHandling(e, warningMsg);
             }
         }
+        /* ---=================--- */
     };
 
     reader.readAsText(file);
 
 });
-
-
 
 /** 
  * excavate option keys from current option-key text
@@ -58,7 +73,7 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
  * @return {array} current option keys 
 */
 function excavate(mine, minecart) {
-
+    console.log(typeof(mine));
     /* remove Title */
     let pickax1;
     let pickax2;
@@ -92,7 +107,7 @@ function excavate(mine, minecart) {
             valuable = true;
         }
     });
-    console.log(minecart);
+    /* ---=================--- */
     /* throw error; current option keys does NOT exist */
     if(minecart.length < 1){
         throw{
@@ -101,6 +116,7 @@ function excavate(mine, minecart) {
             error: new Error()
         };
     };
+    /* ---=================--- */
 
     /* Return */
     return minecart;
@@ -118,6 +134,7 @@ function takeOut(shelf, articles){
     for (var i = 0; i < shelf.length; i++){
         articles.push(shelf[i].firstChild.data);
     }
+    /* ---=================--- */
     /* Return */
     return articles
 }
@@ -145,6 +162,7 @@ function evaluate(articles, ore ,dish) {
             };
         };
     };
+    /* ---=================--- */
 
     /* throw error; invalid option keys exist */
     if(failure.length > 0){
@@ -155,6 +173,7 @@ function evaluate(articles, ore ,dish) {
             error: new Error()
         };
     };
+    /* ---=================--- */
 }
 
 /**
@@ -169,7 +188,7 @@ function cleaning(table, div, div) {
     wipe(table); // table initiallization
     div.innerHTML = "";
     div.style.visibility = "hidden";
-
+    /* ---=================--- */
 }
 
 /**
@@ -182,6 +201,23 @@ function wipe(table) {
     for(var i = 0; i < table.length; i++) {
         table[i].innerHTML = "";
     };
+    /* ---=================--- */
+}
+
+/**
+ * reference option table initialization
+ * @method
+ * @param {object} file
+*/
+function fileValidate(file) {
+    /* file type is not text */
+    if(file.type != "text/plain"){
+        throw{
+            message: " !Error: Invalid file type",
+            error: new Error()
+        }
+    }
+    /* ---=================--- */
 }
 
 /** 
@@ -191,7 +227,6 @@ function wipe(table) {
  * @param {object} storage array
  * @param {error} error
 */
-
 function warningMsgHandling(e, div) {
     switch (e.name) {
         case "invalidKeyExist":
@@ -214,8 +249,7 @@ function warningMsgHandling(e, div) {
  * @param {object} storage array
  * @param {error} error
 */
-
 function ErrorMsgHandling(e, div) {
-        div.innerHTML = " !Error "
-        div.style.visibility = "visible"
+        div.innerHTML = e.message;
+        div.style.visibility = "visible";
 }

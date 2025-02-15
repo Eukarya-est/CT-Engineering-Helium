@@ -1,11 +1,12 @@
 body {
     background-color: gainsboro;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 #error, #warning{
     border: 1px solid;
     margin: 10px 0px;
-    padding: 15px 10px 15px 50px;
+    padding: 10px 5px 10px 30px;
     background-repeat: no-repeat;
     background-position: 10px center;
 }
@@ -23,13 +24,35 @@ body {
 }
 
 #select-page {
-    margin: 1px;
+    margin: 5px;
+}
+
+input {
+    margin-top: 1px;
+}
+
+input::file-selector-button {
+    padding: 5px;
+    background-color: black;
+    color: white;
+    border: thin solid black;
+    border-radius: 3px;
+}
+
+select {
+    color: white;
+    padding: 5px;
+    background-color: black;
+    border: thin solid black;
+    border-radius: 3px;
 }
 
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
-    width: 50%;
+    table-layout: fixed;
+    width: 500px;
+    position: relative;
   }
 
 th {
@@ -37,4 +60,34 @@ th {
     color: white;
 }
 
+#anncmntDetails {
+    margin: 5px;
+    padding: 5px;
+}
 
+#anncmntTitle {
+    margin: 5px;
+    padding: 5px;
+    width: 200px;
+    background-color: black;
+    color: white;
+    border-radius: 3px;
+    border: none;
+}
+
+#anncmntComment {
+    padding: 10px;
+    font-size: 14px;
+    color: #ff3333;
+}
+
+#anncmntExample {
+    display: flex;
+}
+
+pre{
+    margin: 5px;
+    padding: 20px;
+    width: 400px;
+    border: thin solid black;
+}
