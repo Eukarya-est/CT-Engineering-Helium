@@ -1,51 +1,83 @@
+var required = []; // reqired options array
+var exclusive = []; // exclusive options array
+var referOptions = []; // reference optons array
+var table = document.getElementById('keys'); // store table contents
+var referCol = table.querySelectorAll("[id^='col1']"); // select 1st column
+/* --- extract reference table options ⇒ referOptions --- */
+takeOut();
+/* ---==============================--- */
+
+// function after event to select option
 document.getElementById(`product`).addEventListener('change', function(event) {
+    required = [];
+    exclusive = [];
 
     const product = event.target.value;
+        switch(product) {
+            case "none":
+                break;
+            case "mercury":
+                required = ["100kVA", "1024 Image Matrix", "3D Dose Modulation", "AntiMalware", "AxialShuttle", "Cardiac SnapShot",
+                    "Helical-120-Sec", "High Pitch Helical", "0.4Speed", "Lung Cancer Screening", "Organ Dose Modulation", "Overlap Recon", "64-slice", "Tube7_0MHU"];
+                break;
+            case "venus":
+                required = ["100kVA", "1024 Image Matrix", "3D Dose Modulation", "AntiMalware", "AxialShuttle", "Cardiac SnapShot",
+                    "Helical-120-Sec", "High Pitch Helical", "0.4Speed", "Lung Cancer Screening", "Organ Dose Modulation", "Overlap Recon", "64-slice", "Tube7_0MHU"];
+                exclusive = ["Overlap Recon", "64-slice"];
+                break;
+            case "mars":
+                break;
+        };
+
+    dye(); // add color to reference options according to product
 
 });
 
 // function after event to input file
 document.getElementById(`fileInput`).addEventListener('change', function(event) {
 
-    let errorMsg = document.getElementById('error'); // error message area
-    let warningMsg = document.getElementById('warning'); // warning message area
+    var errorMsg = document.getElementById('error'); // error message area
+    var warningMsg = document.getElementById('warning'); // warning message area
+
+    table = document.getElementById('keys'); // store table contents
+    const inputCol = table.querySelectorAll("[id^='col2']"); // select 2nd column
+    cleaning(inputCol, errorMsg, warningMsg); // initialization
     
     const reader = new FileReader(); // load file reader
     const file = event.target.files[0]; // load file
-    /* --- file validation --- */
+    /* --- file type validation --- */
     try{
-        fileValidate(file)
+        fileValidate(file);
     } catch(e) {
         ErrorMsgHandling(e, errorMsg);
+        throw new Error("Invalid file type");
     }
-    /* ---=================--- */
-
-    const table = document.getElementById('keys'); // save default table status
-    const inputCol = table.querySelectorAll("[id^='col2']"); // select 2nd column
-    cleaning(inputCol, errorMsg, warningMsg); // initialization
-
-    /* --- extract reference table options ⇒ referOptions --- */
-    const referCol = table.querySelectorAll("[id^='col1']"); // select row
-    let referOptions = []; // array for reference options
-    referOptions = takeOut(referCol, referOptions); //extract
-    /* ---=================--- */
+    /* ---==============================--- */ 
     
     // function after file loaded
     reader.onload = function(event) {
-        const content = event.target.result; // save file contents
-        
+        const contents = event.target.result; // store file contents
+        /* --- file contents validation --- */
+        try{
+            contentsValidate(contents); 
+        } catch(e) {
+            ErrorMsgHandling(e, errorMsg);
+            throw new Error("Invalid file contents");
+        }
+        /* ---==============================--- */
+
         /* --- extract option keys ⇒ options --- */
         let options = []; // array for current options
         try {
-            options = excavate(content, options); // excavate option keys in current contents
+            options = excavate(contents, options); // excavate option keys in current contents
         } catch(e) {
             if (e.name == "noKeysExist"){
                 warningMsgHandling(e, warningMsg);
             } else {
-                ErrorMsgHandling(e, errorMsg);
+                throw new Error();
             }
         };
-        /* ---=================--- */
+        /* ---==============================--- */
         
         /* --- compare reference options to current options  --- */
         const inputCol = table.querySelectorAll("[id^='col2']");
@@ -55,15 +87,63 @@ document.getElementById(`fileInput`).addEventListener('change', function(event) 
             if (e.name == "invalidKeyExist"){
                 warningMsgHandling(e, warningMsg);
             } else {
-                warningMsgHandling(e, warningMsg);
+                throw new Error();
             }
         }
-        /* ---=================--- */
+        /* ---==============================--- */
     };
 
     reader.readAsText(file);
 
 });
+
+/** 
+ * take out option keys from table
+ * @method 
+*/
+function takeOut() {
+    /* store options extracted */
+    for (var i = 0; i < referCol.length; i++){
+        referOptions.push(referCol[i].firstChild.data);
+    }
+    /* ---==============================--- */
+}
+
+/** 
+ * add color to reference options according to product
+ * @method 
+ * @param {boolean} dye flag
+*/
+function dye(){
+    
+        for (var i = 0; i < referOptions.length; i++){   
+            referCol[i].style.backgroundColor = "transparent"; 
+            referCol[i].style.color = "black";          
+            if(required.length > 0){
+                var j = 0;
+                while (j < required.length) {
+                    if(required[j].toLowerCase().includes(referOptions[i].toLowerCase())){
+                        referCol[i].style.backgroundColor = "#ffee58";
+                        break;
+                    };
+                    j++; 
+                };
+            }
+            if(exclusive.length > 0){
+                var k = 0;
+                while (k < exclusive.length) {
+                    if(exclusive[k].toLowerCase().includes(referOptions[i].toLowerCase())){
+                        referCol[i].style.backgroundColor = "#616161";
+                        referCol[i].style.color = "#bdbdbd";
+                        break;
+                    };
+                    k++; 
+                };
+            };
+        };
+    /* ---==============================--- */
+}
+
 
 /** 
  * excavate option keys from current option-key text
@@ -95,22 +175,18 @@ function excavate(mine, minecart) {
     const ore = pickax3.split('#');
     /* store options excavated */
     let valuable = true;
-
     ore.forEach((mineral) =>  {
-        
-        if (mineral.includes('End Of List') 
-            || mineral.includes('Product Software Option Keys') 
-            || mineral == '!' 
-            || mineral == ''
-        ){
+        if (mineral.includes('End Of List')){
             valuable = false;
+        } else if (mineral.includes('Product Software Option Keys') || mineral == '!' || mineral == ''){
+            valuable = true;
         } else if (valuable && mineral.includes('!')) {
             minecart.push(mineral.replace('!',''));
         } else {
             valuable = true;
-        }
+        };
     });
-    /* ---=================--- */
+    /* ---==============================--- */
     /* throw error; current option keys does NOT exist */
     if(minecart.length < 1){
         throw{
@@ -119,28 +195,11 @@ function excavate(mine, minecart) {
             error: new Error()
         };
     };
-    /* ---=================--- */
+    /* ---==============================--- */
 
     /* Return */
     return minecart;
 };
-
-/** 
- * take out option keys from table
- * @method 
- * @param {object} table contents
- * @param {array} storage array
- * @return {array} reference option keys
-*/
-function takeOut(shelf, articles){
-    /* store options extracted */
-    for (var i = 0; i < shelf.length; i++){
-        articles.push(shelf[i].firstChild.data);
-    }
-    /* ---=================--- */
-    /* Return */
-    return articles
-}
 
 /**
  * arrange data to table
@@ -165,7 +224,7 @@ function evaluate(articles, ore ,dish) {
             };
         };
     };
-    /* ---=================--- */
+    /* ---==============================--- */
 
     /* throw error; invalid option keys exist */
     if(failure.length > 0){
@@ -176,7 +235,7 @@ function evaluate(articles, ore ,dish) {
             error: new Error()
         };
     };
-    /* ---=================--- */
+    /* ---==============================--- */
 }
 
 /**
@@ -193,7 +252,7 @@ function cleaning(table, error, warn) {
     error.style.visibility = "hidden";
     warn.innerHTML = "";
     warn.style.visibility = "hidden";
-    /* ---=================--- */
+    /* ---==============================--- */
 }
 
 /**
@@ -206,7 +265,7 @@ function wipe(table) {
     for(var i = 0; i < table.length; i++) {
         table[i].innerHTML = "";
     };
-    /* ---=================--- */
+    /* ---==============================--- */
 }
 
 /**
@@ -215,14 +274,32 @@ function wipe(table) {
  * @param {object} file
 */
 function fileValidate(file) {
+
     /* file type is not text */
     if(file.type != "text/plain"){
         throw{
             message: " !Error: Invalid file type",
             error: new Error()
         }
-    }
-    /* ---=================--- */
+    };
+    /* ---==============================--- */
+}
+
+/**
+ * reference option table initialization
+ * @method
+ * @param {object} file contents
+*/
+function contentsValidate(contents) {
+    let sample = contents.substring(0, 100);
+    const regExp = new RegExp(/^[a-zA-Z0-9\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"\n\r\s+]+/g);
+        if(!regExp.test(sample)){
+            throw{
+                message: " !Error: Invalid file contents",
+                error: new Error()
+            }
+        };
+    /* ---==============================--- */
 }
 
 /** 
@@ -233,7 +310,7 @@ function fileValidate(file) {
  * @param {error} error
 */
 function warningMsgHandling(e, div) {
-    switch (e.name) {
+    switch(e.name) {
         case "invalidKeyExist":
             div.innerHTML = e.message;
             div.style.visibility = "visible";

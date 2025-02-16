@@ -13,12 +13,14 @@ body {
 
 #error {
     background-color: #ffbaba;
+    border-radius: 5px;
     color: #ff3333;
     visibility: hidden;
 }
 
 #warning {
     background-color: #ffffb3;
+    border-radius: 5px;
     color: #9f6000;
     visibility: hidden;
 }
@@ -49,7 +51,9 @@ select {
 
 table, th, td {
     border: 1px solid black;
-    border-collapse: collapse;
+    border-radius: 5px;
+    border-collapse: separate;
+    padding: 5px 10px 5px 10px;
     table-layout: fixed;
     width: 500px;
     position: relative;
