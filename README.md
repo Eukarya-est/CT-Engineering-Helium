@@ -7,6 +7,6 @@ So this web app replace for Excel macro anywhere that can use a browser(Edge, Ch
 Yon can try this app to download test files from [here](https://github.com/user-attachments/files/18858430/testfiles.zip). \
 Yon can try this app from [here](https://eukarya-est.github.io/helium/).
 
-\* It has some differences from real work thing.
+※ It has some differences from real work thing.
 
 2025.02.13 - 02.16
