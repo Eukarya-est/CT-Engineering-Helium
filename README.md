@@ -1,5 +1,5 @@
 # Helium
-## simple web app for installed option key verification with vanilla JS
+## Simple web app for installed system option key verification with vanilla JS
 
 Excel macro is dull and has minor breakdowns and necessary for Excel. \
 So this web app replace for Excel macro anywhere that can use a browser(Edge, Chrome, Firefox, ... ) without Internet connection.
